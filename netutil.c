@@ -146,9 +146,11 @@ PHP_FUNCTION(get_hwaddr)
     sprintf(str, "%.2x:%.2x:%.2x:%.2x:%.2x:%.2x",
             (unsigned char)ifr.ifr_hwaddr.sa_data[0],
             (unsigned char)ifr.ifr_hwaddr.sa_data[1],
-            (unsigned char)ifr.ifr_hwaddr.sa_data[2],            (unsigned char)ifr.ifr_hwaddr.sa_data[3],
+            (unsigned char)ifr.ifr_hwaddr.sa_data[2],
+            (unsigned char)ifr.ifr_hwaddr.sa_data[3],
             (unsigned char)ifr.ifr_hwaddr.sa_data[4],
-            (unsigned char)ifr.ifr_hwaddr.sa_data[5]);    ZVAL_STRINGL(return_value, str, strlen(str), 1);
+            (unsigned char)ifr.ifr_hwaddr.sa_data[5]);
+    ZVAL_STRINGL(return_value, str, strlen(str), 1);
 }
 // }}}
 
@@ -171,7 +173,7 @@ PHP_FUNCTION(get_addr)
     if (ioctl(fd, SIOCGIFADDR, &ifr) < 0) {
         close(fd);
     }
-    char str[100];
+    char str[INET_ADDRSTRLEN+1];
     sprintf(str, "%s", inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
 
     ZVAL_STRINGL(return_value, str, strlen(str), 1);
